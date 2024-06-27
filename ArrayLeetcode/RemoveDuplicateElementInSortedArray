@@ -1,0 +1,39 @@
+
+public class RemoveDuplicates {
+	
+	
+	public static int removeDuplicates(int[] nums) {
+		
+		if(nums.length==0) {
+			return 0;
+		}
+		int uniqueIndex= 0;
+		for(int i= 1; i<nums.length;i++) {
+			if(nums[i]!= nums[uniqueIndex]) {
+				System.out.println(uniqueIndex+" bedore anything loop after swap");
+				uniqueIndex++;
+				nums[uniqueIndex] = nums[i];
+				
+				System.out.println(uniqueIndex+" inside loop after swap");
+				
+			}
+		}
+		System.out.println(uniqueIndex+" outside the loop");
+		return  uniqueIndex+1;
+		
+		
+	}
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		int[] nums = {1,1,2};
+		int length = removeDuplicates(nums);
+		for(int i=0; i<length;i++) {
+			System.out.print(nums[i]+" ");
+		}
+		
+		
+
+	}
+
+}
