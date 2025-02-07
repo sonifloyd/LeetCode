@@ -1,0 +1,36 @@
+// Brute Force Solution - O(n²) time complexity
+class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        for (int i = 0; i < nums.length; i++) {
+            for (int j = i + 1; j < nums.length; j++) {
+                if (nums[i] + nums[j] == target) {
+                    return new int[]{i, j}; // Found the pair // in java we directly can not return i,j  -> this return in array 
+                }
+            }
+        }
+        return new int[]{}; // Should never reach here
+    }
+}
+
+
+Using HashMap
+// Optimized HashMap Solution - O(n) time complexity
+import java.util.HashMap;
+
+class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        HashMap<Integer, Integer> map = new HashMap<>();
+        
+        for (int i = 0; i < nums.length; i++) {
+            int complement = target - nums[i]; // Required value
+            
+            if (map.containsKey(complement)) {
+                return new int[]{map.get(complement), i}; // Found the pair
+            }
+            
+            map.put(nums[i], i); // Store the number and its index
+        }
+        
+        return new int[]{}; // Should never reach here
+    }
+}
