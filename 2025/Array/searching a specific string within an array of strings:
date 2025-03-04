@@ -1,0 +1,28 @@
+public class StringSearch {
+
+    public static boolean searchString(String[] array, String target) {
+        if (array == null || target == null) {
+            return false; // Edge case: If array or target is null
+        }
+
+        for (String str : array) {
+            if (str.equals(target)) { // Case-sensitive search
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static void main(String[] args) {
+        String[] array = {"apple", "banana", "orange", "grapes"};
+        String target = "orange";
+
+        boolean result = searchString(array, target);
+
+        if (result) {
+            System.out.println(target + " found in the array.");
+        } else {
+            System.out.println(target + " not found in the array.");
+        }
+    }
+}
