@@ -1,1 +1,115 @@
 
+1. Remove duplicates from an ArrayList (with Set)
+java
+Copy
+Edit
+public List<Integer> removeDuplicates(List<Integer> list) {
+    return new ArrayList<>(new LinkedHashSet<>(list)); // preserves order
+}
+✅ Uses Set (no duplicates), LinkedHashSet maintains insertion order.
+
+✅ 2. Remove duplicates from an Array (Primitive Int[])
+a. Using HashSet
+java
+Copy
+Edit
+public int[] removeDuplicates(int[] nums) {
+    Set<Integer> set = new LinkedHashSet<>();
+    for (int num : nums) set.add(num);
+    int[] result = new int[set.size()];
+    int i = 0;
+    for (int num : set) result[i++] = num;
+    return result;
+}
+b. Using Sorting + Two Pointers (In-place)
+java
+Copy
+Edit
+public int[] removeDuplicatesSorted(int[] nums) {
+    Arrays.sort(nums);
+    int j = 0;
+    for (int i = 1; i < nums.length; i++) {
+        if (nums[i] != nums[j]) {
+            nums[++j] = nums[i];
+        }
+    }
+    return Arrays.copyOfRange(nums, 0, j + 1);
+}
+✅ Works only if you allow sorting.
+
+✅ 3. Remove duplicates from a String
+a. Using LinkedHashSet
+java
+Copy
+Edit
+public String removeDuplicateChars(String str) {
+    Set<Character> set = new LinkedHashSet<>();
+    for (char c : str.toCharArray()) set.add(c);
+    StringBuilder sb = new StringBuilder();
+    for (char c : set) sb.append(c);
+    return sb.toString();
+}
+b. Using boolean array (ASCII assumption)
+java
+Copy
+Edit
+public String removeDuplicateCharsFast(String str) {
+    boolean[] seen = new boolean[256]; // ASCII
+    StringBuilder sb = new StringBuilder();
+    for (char c : str.toCharArray()) {
+        if (!seen[c]) {
+            seen[c] = true;
+            sb.append(c);
+        }
+    }
+    return sb.toString();
+}
+✅ 4. Remove duplicates from a LinkedList
+java
+Copy
+Edit
+public ListNode removeDuplicates(ListNode head) {
+    Set<Integer> seen = new HashSet<>();
+    ListNode dummy = new ListNode(0);
+    dummy.next = head;
+    ListNode prev = dummy;
+    while (head != null) {
+        if (seen.contains(head.val)) {
+            prev.next = head.next; // skip duplicate
+        } else {
+            seen.add(head.val);
+            prev = head;
+        }
+        head = head.next;
+    }
+    return dummy.next;
+}
+✅ 5. Remove consecutive duplicates from sorted array
+java
+Copy
+Edit
+public int removeConsecutiveDuplicates(int[] arr) {
+    if (arr.length == 0) return 0;
+    int index = 1;
+    for (int i = 1; i < arr.length; i++) {
+        if (arr[i] != arr[i - 1]) {
+            arr[index++] = arr[i];
+        }
+    }
+    return index; // length of unique array segment
+}
+✅ 6. Remove duplicates from a List of Objects using Java 8
+java
+Copy
+Edit
+List<Employee> unique = employees.stream()
+    .distinct() // works if equals() and hashCode() are overridden
+    .collect(Collectors.toList());
+💡 Summary
+Data Type	Best Approach	Notes
+List	new ArrayList<>(new LinkedHashSet<>(list))	Preserves order
+int[]	HashSet or Sorting + 2-pointer	In-place if sorting allowed
+String	LinkedHashSet or boolean[]	Efficient for small char sets
+LinkedList	Use Set and traversal	Must handle node removal
+Java 8 Stream	distinct()	Needs equals/hashCode
+
