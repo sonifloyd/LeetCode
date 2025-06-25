@@ -1,1 +1,102 @@
 
+ Iterative - Three-Pointer (★ best-practice)
+java
+Copy
+Edit
+public ListNode reverseList(ListNode head) {
+    ListNode prev = null, curr = head;
+    while (curr != null) {
+        ListNode next = curr.next; // store next
+        curr.next = prev;          // reverse link
+        prev = curr;               // move prev
+        curr = next;               // advance
+    }
+    return prev; // new head
+}
+Time O(n) - Space O(1)
+
+
+Simple Recursive (top-down)
+java
+Copy
+Edit
+public ListNode reverseList(ListNode head) {
+    if (head == null || head.next == null) return head;
+    ListNode newHead = reverseList(head.next);
+    head.next.next = head; // put current node after its next
+    head.next = null;      // terminate
+    return newHead;
+}
+Time O(n) - Space O(n) call stack
+
+Tail-Recursive Helper (returns both head & tail)
+java
+Copy
+Edit
+public ListNode reverseList(ListNode head) {
+    return reverse(head, null);
+}
+private ListNode reverse(ListNode curr, ListNode prev) {
+    if (curr == null) return prev;          // new head reached
+    ListNode next = curr.next;
+    curr.next = prev;
+    return reverse(next, curr);             // tail recursion
+}
+(JVM may not optimize tail calls, but the pattern is often discussed.)
+
+4️⃣ Stack-Based (uses extra space, but shows alternate idea)
+java
+Copy
+Edit
+public ListNode reverseList(ListNode head) {
+    if (head == null) return null;
+    Deque<ListNode> stack = new ArrayDeque<>();
+    for (ListNode node = head; node != null; node = node.next) {
+        stack.push(node);
+    }
+    ListNode newHead = stack.pop();
+    ListNode current = newHead;
+    while (!stack.isEmpty()) {
+        current.next = stack.pop();
+        current = current.next;
+    }
+    current.next = null;
+    return newHead;
+}
+Time O(n) - Space O(n)
+
+5️⃣ Head-Insertion (a.k.a. “front-insertion”)
+java
+Copy
+Edit
+public ListNode reverseList(ListNode head) {
+    ListNode dummy = new ListNode(0);   // new list head
+    while (head != null) {
+        ListNode next = head.next;
+        head.next = dummy.next; // insert right after dummy
+        dummy.next = head;
+        head = next;
+    }
+    return dummy.next;
+}
+Same complexity as approach 1, but useful when building new head while scanning.
+
+6️⃣ Using Java’s LinkedList Collection
+(Works only if you’re actually storing data in java.util.LinkedList, not custom nodes.)
+
+java
+Copy
+Edit
+import java.util.Collections;
+import java.util.LinkedList;
+
+LinkedList<Integer> list = new LinkedList<>();
+// …populate…
+Collections.reverse(list);   // in-place reversal
+Internally this walks and swaps nodes; complexity is still O(n)
+
+Iterative three-pointer is the go-to: constant space, clear, and you can trace it on a whiteboard.
+
+Recursive shows mastery of call stacks and pointer manipulation.
+
+Mention stack/head-insertion to demonstrate breadth, but code the iterative solution unless the interviewer asks otherwise.
