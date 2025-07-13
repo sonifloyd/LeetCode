@@ -1,0 +1,32 @@
+Input:  s = "abcabcbb"
+Output: 3  // "abc"
+
+public int lengthOfLongestSubstring(String s) {
+    Set<Character> set = new HashSet<>();
+    int start = 0, maxLength = 0;
+
+    for (int end = 0; end < s.length(); end++) {
+        while (set.contains(s.charAt(end))) {
+            set.remove(s.charAt(start));
+            start++;
+        }
+        set.add(s.charAt(end));
+        maxLength = Math.max(maxLength, end - start + 1);
+    }
+    return maxLength;
+}
+
+Example Dry Run on "abcabcbb"
+Step	start	end	Window	set	maxLength
+0	0	0	"a"	a	1
+1	0	1	"ab"	a,b	2
+2	0	2	"abc"	a,b,c	3
+3	0	3	"abca" duplicate 'a' → shrink	b,c,a	3
+4	1	3	"bca"	b,c,a	3
+5	2	4	"cab"	c,a,b	3
+
+✅ Time Complexity
+O(n): Each character is visited at most twice.
+
+✅ Space Complexity
+O(k): Where k is the number of unique characters in the substring.
