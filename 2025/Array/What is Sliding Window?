@@ -1,0 +1,28 @@
+A technique used on arrays/strings to find a subarray or substring matching a condition, usually with:
+
+A start pointer
+
+An end pointer
+
+Move these pointers to create a "window" that slides through the array.
+--------------------
+Find the maximum sum subarray of size K
+nums = [2, 1, 5, 1, 3, 2]
+k = 3
+
+public int maxSumSubarray(int[] nums, int k) {
+    int maxSum = 0;
+    int windowSum = 0;
+    int start = 0;
+
+    for (int end = 0; end < nums.length; end++) {
+        windowSum += nums[end];
+
+        if (end >= k - 1) {
+            maxSum = Math.max(maxSum, windowSum);
+            windowSum -= nums[start];
+            start++;
+        }
+    }
+    return maxSum;
+}
