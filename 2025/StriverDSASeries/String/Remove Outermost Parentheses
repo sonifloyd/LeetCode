@@ -1,0 +1,54 @@
+
+
+Explanation
+depth tracks how deep we are inside nested parentheses.
+
+If depth > 0 before adding '(' → it's not outermost, so we add it.
+
+We decrease depth first before checking '')' — if after decrement, 
+depth > 0, then this is not the outermost closing so we add it.
+
+Example Walkthrough
+For s = "()(()())(())"
+
+We parse:
+
+'(' → depth=1, don't add.
+
+')' → depth=0, don't add.
+
+'(' → depth=1, don't add.
+
+'(' → depth=2, add '('.
+
+etc...
+
+We end up with: (()())()
+------   ----------------------------------
+
+public static String removeOuterParentheses(String s) {
+    StringBuilder result = new StringBuilder();
+    int depth = 0;
+
+    for (char c : s.toCharArray()) {
+        if (c == '(') {
+            if (depth > 0) {
+                result.append(c);
+            }
+            depth++;
+        } else if (c == ')') {
+            depth--;
+            if (depth > 0) {
+                result.append(c);
+            }
+        }
+    }
+
+    return result.toString();
+}
+
+ Time Complexity
+O(n): single pass through the string.
+
+✅ Space Complexity
+O(n): for the resulting string.
