@@ -1,0 +1,148 @@
+
+-- using compare and sort methods 
+import java.util.Arrays;
+
+public class AnagramCheck {
+    public static boolean isAnagram(String str1, String str2) {
+        // If lengths are different, cannot be anagram
+        if (str1.length() != str2.length()) {
+            return false;
+        }
+
+        // Convert to char array
+        char[] arr1 = str1.toCharArray();
+        char[] arr2 = str2.toCharArray();
+
+        // Sort both arrays
+        Arrays.sort(arr1);
+        Arrays.sort(arr2);
+
+        // Compare
+        return Arrays.equals(arr1, arr2);
+    }
+
+    public static void main(String[] args) {
+        String s1 = "listen";
+        String s2 = "silent";
+
+        if (isAnagram(s1, s2)) {
+            System.out.println(s1 + " and " + s2 + " are Anagrams.");
+        } else {
+            System.out.println(s1 + " and " + s2 + " are NOT Anagrams.");
+        }
+    }
+}
+
+Approach 1: Sorting + Compare
+
+TC: O(n log n) (sorting both strings)
+
+SC: O(1) (if in-place sort) or O(n) (depending on sort implementation)
+-----
+ -----------------------------
+Approach 2: Using Character Count (More Efficient)
+public class AnagramCheck {
+    public static boolean isAnagram(String str1, String str2) {
+        if (str1.length() != str2.length()) {
+            return false;
+        }
+
+        int[] count = new int[256]; // ASCII characters
+
+        for (int i = 0; i < str1.length(); i++) {
+            count[str1.charAt(i)]++;
+            count[str2.charAt(i)]--;
+        }
+
+        for (int c : count) {
+            if (c != 0) return false;
+        }
+        return true;
+    }
+
+    public static void main(String[] args) {
+        String s1 = "triangle";
+        String s2 = "integral";
+
+        System.out.println(isAnagram(s1, s2) ? "Anagram" : "Not Anagram");
+    }
+}
+
+Approach 2: Count Array (Fixed 256 ASCII)
+
+TC: O(n) (single pass to count, single pass to check)
+
+SC: O(1) (constant 256 size array, independent of input length)
+
+------------------------------------
+Approach 3: Using HashMap (Frequency Map)
+
+import java.util.HashMap;
+
+public class AnagramCheck {
+    public static boolean isAnagram(String str1, String str2) {
+        if (str1.length() != str2.length()) return false;
+
+        HashMap<Character, Integer> map = new HashMap<>();
+
+        // Count frequency of each char in str1
+        for (char c : str1.toCharArray()) {
+            map.put(c, map.getOrDefault(c, 0) + 1);
+        }
+
+        // Decrease count using str2
+        for (char c : str2.toCharArray()) {
+            if (!map.containsKey(c)) return false;
+            map.put(c, map.get(c) - 1);
+
+            if (map.get(c) == 0) {
+                map.remove(c);
+            }
+        }
+
+        return map.isEmpty(); // If empty, anagram
+    }
+
+    public static void main(String[] args) {
+        String s1 = "earth";
+        String s2 = "heart";
+
+        System.out.println(isAnagram(s1, s2) ? "Anagram" : "Not Anagram");
+    }
+}
+
+Approach 3: HashMap Frequency Count
+
+TC: O(n) (one pass for str1 + one pass for str2)
+
+SC: O(k) (where k = number of distinct characters, worst case O(n))
+---------------------------
+Approach 4: Using Streams & Collections (Java 8+)
+
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+public class AnagramCheck {
+    public static boolean isAnagram(String s1, String s2) {
+        if (s1.length() != s2.length()) return false;
+
+        return s1.chars().boxed()
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+                .equals(
+                s2.chars().boxed()
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting())));
+    }
+
+    public static void main(String[] args) {
+        String s1 = "listen";
+        String s2 = "silent";
+
+        System.out.println(isAnagram(s1, s2) ? "Anagram" : "Not Anagram");
+    }
+}
+
+Approach 4: Streams & Collectors
+
+TC: O(n) (but with higher constant factors due to stream operations & boxing/unboxing)
+
+SC: O(k) (HashMap internally, k distinct characters)
